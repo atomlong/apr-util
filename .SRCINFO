@@ -9,15 +9,15 @@ pkgbase = apr-util
 	makedepends = apr-devel
 	makedepends = libexpat-devel
 	makedepends = libsqlite-devel
+	makedepends = libcrypt-devel
+	makedepends = libiconv-devel
 	makedepends = autotools
 	makedepends = gcc
 	options = !libtool
 	source = https://archive.apache.org/dist/apr/apr-util-1.6.3.tar.bz2
 	source = plugins.patch
-	source = fix-dll-build.patch
 	sha256sums = a41076e3710746326c3945042994ad9a4fcac0ce0277dd8fea076fec3c9772b5
 	sha256sums = 3280d6ed8e577b626e60d495856d16f6944c3144c495fe9ed8cad6b39332824c
-	sha256sums = b33b18e612f54ea15c9303aede19e4a2b9ec2550fd081add61d13eff6446d44a
 
 pkgname = apr-util
 	groups = libraries

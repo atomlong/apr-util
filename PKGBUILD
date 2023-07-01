@@ -6,21 +6,18 @@ pkgrel=2
 pkgdesc="The Apache Portable Runtime"
 arch=('i686' 'x86_64')
 url="https://apr.apache.org/"
-makedepends=('apr-devel' 'libexpat-devel' 'libsqlite-devel' 'autotools' 'gcc')
+makedepends=('apr-devel' 'libexpat-devel' 'libsqlite-devel' 'libcrypt-devel' 'libiconv-devel' 'autotools' 'gcc')
 options=('!libtool')
 license=('spdx:Apache-2.0')
 source=("https://archive.apache.org/dist/apr/apr-util-${pkgver}.tar.bz2"
-        plugins.patch
-		fix-dll-build.patch)
+        plugins.patch)
 sha256sums=('a41076e3710746326c3945042994ad9a4fcac0ce0277dd8fea076fec3c9772b5'
-            '3280d6ed8e577b626e60d495856d16f6944c3144c495fe9ed8cad6b39332824c'
-			'b33b18e612f54ea15c9303aede19e4a2b9ec2550fd081add61d13eff6446d44a')
+            '3280d6ed8e577b626e60d495856d16f6944c3144c495fe9ed8cad6b39332824c')
 
 prepare() {
   cd "${srcdir}/apr-util-${pkgver}"
 
   patch -p1 -i ${srcdir}/plugins.patch
-  patch -p1 -i ${srcdir}/fix-dll-build.patch
 
   autoreconf -fi
 }
@@ -28,17 +25,20 @@ prepare() {
 build() {
   cd "${srcdir}/apr-util-${pkgver}"
 
+  export MSYSTEM=CYGWIN
+  local CYGWIN_CHOST="${CHOST/-msys/-cygwin}"
   ./configure \
-    --build=${CHOST} \
+    --build=${CYGWIN_CHOST} \
     --prefix=/usr \
     --with-apr=/usr \
     --with-expat=/usr \
     --without-gdbm \
     --without-ldap \
     --without-pgsql \
-    --with-sqlite3=/usr
+    --with-sqlite3=/usr \
+	--with-crypto=/usr
 
-  make -j1 LDFLAGS="${LDFLAGS} -no-undefined"
+  make -j1
   make DESTDIR="${srcdir}/dest" install
 }
 
